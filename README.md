@@ -9,14 +9,16 @@ La más importante es:
 
 - [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
 
-Para permitir el acceso a los recursos que expone una api desde cualquier origen, esta cabecera debe estar establecida a '*'. En un ejemplo en nodejs:
+Para permitir el acceso a los recursos que expone una api desde cualquier origen, esta cabecera debe estar establecida a '*'. No obstante, el empleo de * está desaconsejado, y se puede sustituir por una lista de los origin (hosts) desde los que se pueden realizar peticiones. 
+
+En un ejemplo en nodejs:
 
 ```js
 
 app.use(function(req, res, next){
 
 	//ponemos el header al valor correcto
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://foo1.org, https://foo2.org");
 
 	next();
 
@@ -57,7 +59,7 @@ Para habilitar las preflighted requests es necesario modificar un poco la lógic
 Se necesita discernir qué tipo de petición se está recibiendo:
 
 * En el caso de métodos que no sean OPTIONS:
-  * Devolver Access-Control-Allow-Origin (con '*' si se quiere habilitar para todos)
+  * Devolver Access-Control-Allow-Origin (con '*' si se quiere habilitar para todos o una lista de los hosts permitidos)
   * Devolver Access-Control-Allow-Methods (con todos los métodos que se quieren permitir que no sean OPTIONS (GET,PUT,POST,DELETE...))
   * Devolver Access-Control-Allow-Headers (Con las cabeceras que se quieren permitir (principalmente 'Content-Type' y 'Authorization')=
 * En el caso del método OPTIONS:
@@ -70,7 +72,7 @@ En un ejemplo en nodejs,
 
 app.use(function(req, res, next){
 
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', '*'); // o una lista de origins
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
